@@ -40,6 +40,24 @@
             border-radius: 5px;
             word-wrap: break-word;
         }
+        #ascii-container {
+            max-width: 100%;
+            overflow: auto;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #ff0000;
+            color: #000;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #ffd700;
+            color: #000;
+        }
     </style>
 </head>
 <body>
@@ -49,6 +67,7 @@
         <h2>Upload an image</h2>
         <input type="file" id="image-upload" accept="image/*" />
         <div id="ascii-output"></div>
+        <button class="btn" id="view-larger-btn" style="display: none;">View Larger in New Window</button>
     </div>
 
     <script>
@@ -94,6 +113,12 @@
 
                 // Display the generated ASCII art
                 document.getElementById('ascii-output').innerHTML = asciiImage;
+
+                // Show the button to view in a larger window
+                document.getElementById('view-larger-btn').style.display = 'block';
+                document.getElementById('view-larger-btn').onclick = function() {
+                    openInNewWindow(asciiImage);
+                };
             };
 
             const reader = new FileReader();
@@ -101,6 +126,13 @@
                 img.src = event.target.result;
             };
             reader.readAsDataURL(file);
+        }
+
+        // Function to open ASCII art in a larger window
+        function openInNewWindow(asciiArt) {
+            const newWindow = window.open("", "_blank", "width=800,height=600");
+            newWindow.document.write('<html><head><title>ASCII Art</title><style>body {background-color: #111; color: #ffd700; font-family: Consolas, monospace; padding: 20px; text-align: center;} pre {white-space: pre-wrap; font-size: 10px; line-height: 1.2;} </style></head><body><pre>' + asciiArt + '</pre></body></html>');
+            newWindow.document.close();
         }
 
         // Event listener for file input
