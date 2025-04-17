@@ -31,14 +31,7 @@
             border-radius: 5px;
         }
         #ascii-output {
-            white-space: pre-wrap;
-            color: #ffd700;
-            font-size: 10px;
-            line-height: 1.2;
-            background-color: #111;
-            padding: 20px;
-            border-radius: 5px;
-            word-wrap: break-word;
+            display: none;
         }
         .btn {
             padding: 10px 20px;
@@ -62,8 +55,7 @@
     <div class="container">
         <h2>Upload an image</h2>
         <input type="file" id="image-upload" accept="image/*" />
-        <div id="ascii-output"></div>
-        <button class="btn" id="view-larger-btn" style="display: none;">View Larger in Fullscreen Tab</button>
+        <button class="btn" id="view-larger-btn" style="display: none;">View Full ASCII Art</button>
     </div>
 
     <script>
@@ -95,8 +87,8 @@
                     const g = data[i + 1]; // Green
                     const b = data[i + 2]; // Blue
 
-                    // Adjust the grayscale calculation for lighter tones
-                    const gray = Math.floor((r + g + b) / 3);
+                    // Adjust the grayscale calculation for lighter tones (enhanced contrast)
+                    const gray = Math.floor((r * 0.3 + g * 0.59 + b * 0.11));  // Applying luminance formula
                     const char = ASCII_CHARS[Math.floor(gray / 255 * (ASCII_CHARS.length - 1))];
                     
                     // Dynamically add color based on pixel brightness
@@ -108,9 +100,6 @@
                         asciiImage += '<br>';
                     }
                 }
-
-                // Display the generated ASCII art
-                document.getElementById('ascii-output').innerHTML = asciiImage;
 
                 // Show the button to view in fullscreen tab
                 document.getElementById('view-larger-btn').style.display = 'block';
@@ -131,10 +120,10 @@
             const newWindow = window.open("", "_blank");
             const imageWidth = document.getElementById('ascii-output').offsetWidth; // Get image width for sizing
 
-            // Set zoom level based on image size
-            let zoomLevel = 50; // Default zoom level for normal images
-            if (imageWidth > 800) { // If image is larger, apply 37.5% zoom
-                zoomLevel = 37.5;
+            // Set zoom level to 37% for large images, 50% for smaller ones
+            let zoomLevel = 50;
+            if (imageWidth > 800) {
+                zoomLevel = 37;
             }
 
             // Add the ASCII art to the new window at the top of the page
@@ -148,7 +137,7 @@
                     margin: 0;
                     padding: 0;
                     overflow: hidden;
-                    zoom: ${zoomLevel}%; /* Zoom based on image size */
+                    zoom: ${zoomLevel}%; /* Apply the zoom level */
                     text-align: center;
                 }
                 pre {
