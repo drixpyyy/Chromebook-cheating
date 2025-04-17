@@ -67,7 +67,7 @@
     </div>
 
     <script>
-        const ASCII_CHARS = "@MW#8&%$BDQ0ZOOQLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
+        const ASCII_CHARS = "@B%8&MW#*0LOQ0CJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
 
         // Function to handle image processing
         function processImage(file) {
@@ -94,6 +94,8 @@
                     const r = data[i];     // Red
                     const g = data[i + 1]; // Green
                     const b = data[i + 2]; // Blue
+
+                    // Adjust the grayscale calculation for lighter tones
                     const gray = Math.floor((r + g + b) / 3);
                     const char = ASCII_CHARS[Math.floor(gray / 255 * (ASCII_CHARS.length - 1))];
                     
@@ -127,6 +129,15 @@
         // Function to open ASCII art in fullscreen in a new tab
         function openInFullscreenTab(asciiArt) {
             const newWindow = window.open("", "_blank");
+            const imageWidth = document.getElementById('ascii-output').offsetWidth; // Get image width for sizing
+
+            // Set zoom level based on image size
+            let zoomLevel = 50; // Default zoom level for normal images
+            if (imageWidth > 800) { // If image is larger, apply 37.5% zoom
+                zoomLevel = 37.5;
+            }
+
+            // Add the ASCII art to the new window at the top of the page
             newWindow.document.write(`
                 <html>
                 <head><title>ASCII Art</title><style>
@@ -137,7 +148,8 @@
                     margin: 0;
                     padding: 0;
                     overflow: hidden;
-                    zoom: 50%; /* Automatically zoom out to 50% */
+                    zoom: ${zoomLevel}%; /* Zoom based on image size */
+                    text-align: center;
                 }
                 pre {
                     white-space: pre-wrap;
@@ -148,6 +160,8 @@
                     word-wrap: break-word;
                     overflow: auto;
                     color: inherit;
+                    display: block;
+                    text-align: center;
                 }
                 </style></head>
                 <body><pre>${asciiArt}</pre></body>
