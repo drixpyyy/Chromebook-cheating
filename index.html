@@ -40,10 +40,6 @@
             border-radius: 5px;
             word-wrap: break-word;
         }
-        #ascii-container {
-            max-width: 100%;
-            overflow: auto;
-        }
         .btn {
             padding: 10px 20px;
             background-color: #ff0000;
@@ -67,7 +63,7 @@
         <h2>Upload an image</h2>
         <input type="file" id="image-upload" accept="image/*" />
         <div id="ascii-output"></div>
-        <button class="btn" id="view-larger-btn" style="display: none;">View Larger in New Window</button>
+        <button class="btn" id="view-larger-btn" style="display: none;">View Larger in Fullscreen Tab</button>
     </div>
 
     <script>
@@ -114,10 +110,10 @@
                 // Display the generated ASCII art
                 document.getElementById('ascii-output').innerHTML = asciiImage;
 
-                // Show the button to view in a larger window
+                // Show the button to view in fullscreen tab
                 document.getElementById('view-larger-btn').style.display = 'block';
                 document.getElementById('view-larger-btn').onclick = function() {
-                    openInNewWindow(asciiImage);
+                    openInFullscreenTab(asciiImage);
                 };
             };
 
@@ -128,11 +124,36 @@
             reader.readAsDataURL(file);
         }
 
-        // Function to open ASCII art in a larger window
-        function openInNewWindow(asciiArt) {
-            const newWindow = window.open("", "_blank", "width=800,height=600");
-            newWindow.document.write('<html><head><title>ASCII Art</title><style>body {background-color: #111; color: #ffd700; font-family: Consolas, monospace; padding: 20px; text-align: center;} pre {white-space: pre-wrap; font-size: 10px; line-height: 1.2;} </style></head><body><pre>' + asciiArt + '</pre></body></html>');
+        // Function to open ASCII art in fullscreen in a new tab
+        function openInFullscreenTab(asciiArt) {
+            const newWindow = window.open("", "_blank");
+            newWindow.document.write(`
+                <html>
+                <head><title>ASCII Art</title><style>
+                body {
+                    background-color: #111;
+                    color: #ffd700;
+                    font-family: Consolas, monospace;
+                    margin: 0;
+                    padding: 0;
+                    overflow: hidden;
+                }
+                pre {
+                    white-space: pre-wrap;
+                    font-size: 12px;
+                    line-height: 1.2;
+                    margin: 0;
+                    padding: 20px;
+                    word-wrap: break-word;
+                    overflow: auto;
+                    color: inherit;
+                }
+                </style></head>
+                <body><pre>${asciiArt}</pre></body>
+                </html>
+            `);
             newWindow.document.close();
+            newWindow.focus();
         }
 
         // Event listener for file input
