@@ -118,15 +118,8 @@
         // Function to open ASCII art in fullscreen in a new tab
         function openInFullscreenTab(asciiArt) {
             const newWindow = window.open("", "_blank");
-            const imageWidth = document.getElementById('ascii-output').offsetWidth; // Get image width for sizing
-
-            // Set zoom level to 37% for large images, 50% for smaller ones
-            let zoomLevel = 50;
-            if (imageWidth > 800) {
-                zoomLevel = 37;
-            }
-
-            // Add the ASCII art to the new window at the top of the page
+            
+            // Ensure the ASCII art is properly displayed in the new window
             newWindow.document.write(`
                 <html>
                 <head><title>ASCII Art</title><style>
@@ -137,7 +130,7 @@
                     margin: 0;
                     padding: 0;
                     overflow: hidden;
-                    zoom: ${zoomLevel}%; /* Apply the zoom level */
+                    zoom: 37%; /* Apply the zoom level */
                     text-align: center;
                 }
                 pre {
